@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students-bio</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Tailwind CDN (Optional if you don’t have Tailwind configured locally) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-black flex flex-col justify-center items-center">
+    <div class="bg-yellow-700 w-auto h-auto m-10 p-5 flex flex-col justify-center items-center rounded-2xl">
+        <div class="py-4 px-7 text-yellow-800 text-center text-4xl flex gap-5 justify-center items-center">
+            <h1>Students Register</h1>
+        </div>
+
+        <!-- Registration Form -->
+        <form id="registerForm">
+            <div id="fullname" class="flex gap-x-7">
+                <label for="name">Name</label>
+                <input type="text" name="fullname">
+            </div><br>
+            <div id="email"class="flex gap-x-8">
+                <label for="email">Email</label>
+                <input type="email" name="email">
+            </div><br>
+            <div id="password">
+                <label for="password">Password</label>
+                <input type="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                    title="Password must be at least 8 characters long and include at least one number, one lowercase letter.">
+                <button type="button" id="showPass"
+                class="bg-gray-300 text-black px-4 py-1 rounded text-sm ">Show Password</button>
+            </div>
+            <div id="dob">
+                <label for="dob">Date of Birth</label>
+                <input type="date" name="dob">
+            </div><br>
+            <button id="submit" type="button"
+            class="bg-gray-300 text-black px-4 py-1 rounded text-sm ml-20">Submit</button>
+            <button id="reset" type="reset"
+                class="bg-gray-300 text-black px-4 py-1 rounded text-sm">Reset</button>
+        </form>
+
+        <div id="result"></div>
+
+        <h1 class="mt-6 text-yellow-800 text-3xl">Login</h1>
+
+        <!-- Login Form -->
+        <form id="loginForm">
+            <div id="loginEmail" class="flex gap-x-8">
+                <label for="email">Email</label>
+                <input type="email" name="loginEmail">
+            </div> <br>
+            <div id="loginPassword" >
+                <label for="password">Password</label>
+                <input type="password" name="loginPassword">
+            </div><br>
+            <button id="loginSubmit" type="button"
+            class="bg-gray-300 text-black px-4 py-1 rounded text-sm mx-40">Login</button>
+        </form>
+
+        <div id="loginResult"></div>
+    </div>
+
+    <script>
+        // Registration Form Logic
+        let btn = document.querySelector('#submit');
+        let registeredUser = {};
+
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            let spans = document.querySelectorAll('span');
+            if (spans.length > 0) {
+                spans.forEach((span) => {
+                    span.remove();
+                });
+            }
+
+            let isValid = true;
+            let fullname = document.querySelector('input[name=fullname]').value;
+            let email = document.querySelector('input[name=email]').value;
+            let password = document.querySelector('input[name=password]').value;
+            let dob = document.querySelector('input[name=dob]').value;
+
+            // Validate Fullname
+            if (!fullname || fullname === "") {
+                isValid = false;
+                let span = document.createElement('span');
+                span.style.color = '#ff0000';
+                span.innerText = 'Your name cannot be empty';
+                document.getElementById('fullname').appendChild(span);
+            }
+
+            // Validate Email
+            if (!email || email === "") {
+                isValid = false;
+                let span = document.createElement('span');
+                span.style.color = '#ff0000';
+                span.innerText = 'Your email cannot be empty';
+                document.getElementById('email').appendChild(span);
+            }
+
+            // Validate Password
+            if (!password || password === "") {
+                isValid = false;
+                let span = document.createElement('span');
+                span.style.color = '#ff0000';
+                span.innerText = 'Your password cannot be empty';
+                document.getElementById('password').appendChild(span);
+            } else {
+                let passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+                if (!passwordPattern.test(password)) {
+                    isValid = false;
+                    let span = document.createElement('span');
+                    span.style.color = '#ff0000';
+                    span.innerText = 'Password must be at least 8 characters long and include at least one number, one lowercase letter, and one uppercase letter.';
+                    document.getElementById('password').appendChild(span);
+                }
+            }
+
+            // Validate Date of Birth
+            if (!dob || dob === "") {
+                isValid = false;
+                let span = document.createElement('span');
+                span.style.color = '#ff0000';
+                span.innerText = 'Date of Birth cannot be empty';
+                document.getElementById('dob').appendChild(span);
+            } else {
+                let dobDate = new Date(dob);
+                let today = new Date();
+                let age = today.getFullYear() - dobDate.getFullYear();
+                let month = today.getMonth() - dobDate.getMonth();
+                if (month < 0 || (month === 0 && today.getDate() < dobDate.getDate())) {
+                    age--;
+                }
+                if (age < 18) {
+                    isValid = false;
+                    let span = document.createElement('span');
+                    span.style.color = '#ff0000';
+                    span.innerText = 'You must be at least 18 years old to register.';
+                    document.getElementById('dob').appendChild(span);
+                }
+            }
+
+            if (isValid) {
+                registeredUser = { fullname, email, password, dob };
+                document.getElementById('result').innerHTML = `<h2>Registration Successful</h2>
+                <ul>
+                    <li>Name: ${fullname}</li>
+                    <li>Email: ${email}</li>
+                    <li>Password: ${password}</li>
+                    <li>Date of Birth: ${dob}</li>
+                </ul>`;
+                document.querySelector('#registerForm').reset();
+            } else {
+                document.getElementById('result').innerHTML = "<span style='color:#ff0000'>Please fill all fields correctly</span>";
+            }
+        });
+
+        // Login Logic
+        let loginBtn = document.querySelector('#loginSubmit');
+        loginBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            let loginEmail = document.querySelector('input[name=loginEmail]').value;
+            let loginPassword = document.querySelector('input[name=loginPassword]').value;
+
+            if (loginEmail === registeredUser.email && loginPassword === registeredUser.password) {
+                document.getElementById('loginResult').innerHTML = `<h2>Login Successful</h2><p>Welcome, ${registeredUser.fullname}!</p>`;
+            } else {
+                document.getElementById('loginResult').innerHTML = "<span style='color:#ff0000'>Invalid email or password</span>";
+            }
+        });
+
+        // Show/Hide Password
+        let showPass = document.querySelector("#showPass");
+        showPass.addEventListener('click', (e) => {
+            e.preventDefault();
+            let password = document.querySelector('input[name=password]');
+            if (password.type === "password") {
+                showPass.innerText = 'Hide Password';
+                password.type = 'text';
+            } else {
+                showPass.innerText = 'Show Password';
+                password.type = 'password';
+            }
+        });
+    </script>
+</body>
+
+</html>
