@@ -12,7 +12,7 @@
 
 <body class="bg-black flex flex-col justify-center items-center">
     <div class="bg-yellow-700 w-auto h-auto m-10 p-5 flex flex-col justify-center items-center rounded-2xl">
-        <div class="py-4 px-7 text-yellow-800 text-center text-4xl flex gap-5 justify-center items-center">
+        <div class="py-4 px-7 text-black text-center text-4xl flex gap-5 justify-center items-center">
             <h1>Students Register</h1>
         </div>
 
@@ -26,13 +26,13 @@
                 <label for="email">Email</label>
                 <input type="email" name="email">
             </div><br>
-            <div id="password">
+            <div id="password" class="text to-black">
                 <label for="password">Password</label>
                 <input type="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                    title="Password must be at least 8 characters long and include at least one number, one lowercase letter.">
+                    title ="Password must be at least 8 characters long and include at least one number, one lowercase letter and one uppercase.">
                 <button type="button" id="showPass"
                 class="bg-gray-300 text-black px-4 py-1 rounded text-sm ">Show Password</button>
-            </div>
+            </div><br>
             <div id="dob">
                 <label for="dob">Date of Birth</label>
                 <input type="date" name="dob">
@@ -43,9 +43,9 @@
                 class="bg-gray-300 text-black px-4 py-1 rounded text-sm">Reset</button>
         </form>
 
-        <div id="result"></div>
+        <!-- <div id="result"></div> -->
 
-        <h1 class="mt-6 text-yellow-800 text-3xl">Login</h1>
+        <h1 class="mt-6 text-black text-3xl">Login</h1>
 
         <!-- Login Form -->
         <form id="loginForm">
@@ -61,8 +61,10 @@
             class="bg-gray-300 text-black px-4 py-1 rounded text-sm mx-40">Login</button>
         </form>
 
-        <div id="loginResult"></div>
+        <div id="loginResult"></div> <br>
+        <a class="text-sm" href="https://github.com/">githublink</a>
     </div>
+   
 
     <script>
         // Registration Form Logic
